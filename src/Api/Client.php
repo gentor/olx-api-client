@@ -151,7 +151,10 @@ class Client
             'Accept' => 'application/json'
         ];
 
-        if ($includeToken && $this->token) {
+        if ($includeToken) {
+            if (!$this->token) {
+                $this->generateToken();
+            }
             $headers['Authorization'] = 'Bearer ' . $this->token;
         }
 
