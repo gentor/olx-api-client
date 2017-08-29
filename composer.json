@@ -1,0 +1,20 @@
+{
+    "name": "gentor/olx-api-client",
+    "description": "OLX Api Client",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Evgeni Nurkov",
+            "email": "evgeni.nurkov@gmail.com"
+        }
+    ],
+    "require": {
+        "guzzlehttp/guzzle": "^6.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Gentor\\Olx\\": "src/"
+        }
+    }
+}
