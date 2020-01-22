@@ -13,6 +13,11 @@ class Categories
     private $client;
 
     /**
+     * @var string
+     */
+    private $endpoint = 'open/categories';
+
+    /**
      * Categories constructor.
      * @param Client $client
      */
@@ -27,7 +32,7 @@ class Categories
      */
     public function get($parentId = null)
     {
-        $response = $this->client->request('GET', 'open/categories' . ($parentId ? ('/' . $parentId) : ''));
+        $response = $this->client->request('GET', $this->endpoint . ($parentId ? ('/' . $parentId) : ''));
 
         if ($parentId) {
             return $response;
@@ -83,5 +88,16 @@ class Categories
         }
 
         return $result;
+    }
+
+    /**
+     * @return array
+     * @throws OlxException
+     */
+    public function getTree()
+    {
+        $response = $this->client->request('GET', $this->endpoint, ['all' => 1]);
+
+        return !empty($response->results) ? $response->results : [];
     }
 }

@@ -128,14 +128,13 @@ class Client
             return [];
         }
 
-        $token = $this->handleResponse($response);
-        try {
-            $this->token = $token->access_token;
-        } catch (\Exception $e) {
-            $stream = stream_for($response->getBody());
-            $details = json_decode($stream, false, 512, JSON_UNESCAPED_UNICODE);
-            throw new OlxException($e->getMessage(), $e->getCode(), $details);
+        if (!$token = $this->handleResponse($response)) {
+            // Handle stupid HTML error with response 200 OK
+            $html = $response->getBody() . '<style>.container {width: auto !important;}</style>';
+            throw new OlxException($html, 0, new \stdClass());
         }
+
+        $this->token = $token->access_token;
 
         return $token;
     }
