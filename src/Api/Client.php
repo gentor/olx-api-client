@@ -106,6 +106,7 @@ class Client
 
     /**
      * @return object
+     * @throws OlxException
      */
     public function generateToken()
     {
@@ -128,7 +129,13 @@ class Client
         }
 
         $token = $this->handleResponse($response);
-        $this->token = $token->access_token;
+        try {
+            $this->token = $token->access_token;
+        } catch (\Exception $e) {
+            $stream = stream_for($response->getBody());
+            $details = json_decode($stream, false, 512, JSON_UNESCAPED_UNICODE);
+            throw new OlxException($e->getMessage(), $e->getCode(), $details);
+        }
 
         return $token;
     }
